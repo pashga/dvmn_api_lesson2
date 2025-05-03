@@ -27,8 +27,8 @@ def count_clicks(token, link):
     url_vk = "https://api.vk.ru/method/utils.getLinkStats"
     response = requests.get(url_vk, params=payload)
     response.raise_for_status()
-    clicks_count = response.json()
-    return clicks_count["response"]["stats"][0]["views"]
+    response_json = response.json()
+    return response_json["response"]["stats"][0]["views"]
 
 
 def is_shorten_link(url):
