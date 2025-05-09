@@ -10,11 +10,11 @@ def shorten_link(token, url):
         "v": 5.199,
         "url": url,
     }
-    url_vk = "https://api.vk.ru/method/utils.getShortLink"
-    response = requests.get(url_vk, params=payload)
+    request_url = "https://api.vk.ru/method/utils.getShortLink"
+    response = requests.get(request_url, params=payload)
     response.raise_for_status()
-    response_json = response.json()
-    return response_json['response']["short_url"]
+    response_data = response.json()
+    return response_data['response']["short_url"]
 
 
 def count_clicks(token, link):
@@ -24,16 +24,20 @@ def count_clicks(token, link):
         "key": link[-6:],
         "interval": "forever",
     }
-    url_vk = "https://api.vk.ru/method/utils.getLinkStats"
-    response = requests.get(url_vk, params=payload)
+    request_url = "https://api.vk.ru/method/utils.getLinkStats"
+    response = requests.get(request_url, params=payload)
     response.raise_for_status()
-    response_json = response.json()
-    return response_json["response"]["stats"][0]["views"]
+    response_data = response.json()
+    if "error" in response_data:
+        return False
+    return response_data["response"]["stats"][0]["views"]
 
 
-def is_shorten_link(url):
+def is_shorten_link(token,url):
     parsed_url = urlparse(url)
     if parsed_url.netloc != "vk.cc":
+        return False
+    if not count_clicks(token, url):
         return False
     return True
 
@@ -42,7 +46,7 @@ def main():
     load_dotenv()
     user_input = input("Введите ссылку:")
     token = environ['VK_TOKEN']
-    if is_shorten_link(user_input):
+    if is_shorten_link(token, user_input):
         clicks = count_clicks(token, user_input)
         print(f"Количество переходов по ссылке: {clicks}")
     else:
