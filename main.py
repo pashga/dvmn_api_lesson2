@@ -39,7 +39,7 @@ def is_shorten_link(token,url):
     parsed_url = urlparse(url)
     if parsed_url.netloc != "vk.cc":
         return False
-    if count_clicks(token, url) is False or count_clicks(token, url) is None:
+    if count_clicks(token, url) is False:
         return False
     return True
 
