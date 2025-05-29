@@ -50,7 +50,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("user_input", type=str, help="Enter your link")
     args = parser.parse_args()
-    #user_input = input("Введите ссылку:")
     token = environ['VK_TOKEN']
     if is_shorten_link(token, args.user_input):
         clicks = count_clicks(token, args.user_input)
