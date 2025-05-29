@@ -1,4 +1,5 @@
 import requests
+import argparse
 from os import environ
 from urllib.parse import urlparse
 from dotenv import load_dotenv
@@ -46,13 +47,16 @@ def is_shorten_link(token,url):
 
 def main():
     load_dotenv()
-    user_input = input("Введите ссылку:")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("user_input", type=str, help="Enter your link")
+    args = parser.parse_args()
+    #user_input = input("Введите ссылку:")
     token = environ['VK_TOKEN']
-    if is_shorten_link(token, user_input):
-        clicks = count_clicks(token, user_input)
+    if is_shorten_link(token, args.user_input):
+        clicks = count_clicks(token, args.user_input)
         print(f"Количество переходов по ссылке: {clicks}")
     else:
-        short_link = shorten_link(token, user_input)
+        short_link = shorten_link(token, args.user_input)
         print(f"Укороченная ссылка: {short_link}")
 
 
